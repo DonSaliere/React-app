@@ -1,0 +1,15 @@
+.align-center {
+    text-align: center;
+  }
+.item-add-form {
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+
+.btn-primary {
+    width: 279px;
+  }
+
+.form-control {
+    margin-right: 10px;
+  }

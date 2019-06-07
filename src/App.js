@@ -3,6 +3,7 @@ import PriceList from './components/Table';
 import _ from 'lodash';
 import './Table.css';
 import ItemAddForm from './components/item-add-form';
+import SearchPanel from './components/search-panel';
 
 export default class App extends Component {
 
@@ -26,7 +27,8 @@ maxId = 15;
       {id: 14, article: 'Apacer', name: 'SSD 480GB', price: 6000}
     ],
     sort:'asc',
-    sortField: 'id'
+    sortField: 'id',
+    search: ''
   }; 
 
 onDelete = (id) => {
@@ -65,14 +67,36 @@ onSort = (sortField) => {
     sortField
   })
 };
+
+searchItems(priceData, search) {
+  if (search.length === 0) {
+    return priceData;
+  }
+
+  return priceData.filter((item) => {
+    return item.article.toLowerCase().indexOf(search.toLowerCase()) > -1
+        || item.name.toLowerCase().indexOf(search.toLowerCase()) > -1
+  });
+}
+
+onSearchChange = (search) => {
+  this.setState({ search });
+};
+
   render(){
+    const { priceData, search } = this.state;
+    const visibleItems = this.searchItems(priceData, search);
     return (
       <div className="container">
+            <div className="search-panel d-flex">
+              <SearchPanel
+               onSearchChange={this.onSearchChange}/>
+            </div>
           <ItemAddForm
             onItemAdded = {this.addItem}
           />
           <PriceList 
-            prices = {_.orderBy(this.state.priceData,this.state.sortField,this.state.sort)}
+            prices={ visibleItems }
             onSort = {this.onSort}
             sort = {this.state.sort}
             onDeleted ={(this.onDelete)}
